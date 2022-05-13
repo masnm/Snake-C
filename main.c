@@ -6,7 +6,8 @@
 
 #include "cvector.h"
 
-const int SCREEN_WIDTH = 640, SCREEN_HEIGHT = 360;
+const int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600;
+const int CELL_WIDTH = 12, CELL_HEIGHT = 9;
 
 int main(int argc, char *argv[])
 {
@@ -38,7 +39,7 @@ int main(int argc, char *argv[])
 	// typedef struct SDL_Rect { int x, y; int w, h; } SDL_Rect;
 	cvector snake = cvector_create ( sizeof(SDL_Rect) );
 	for ( int i = 0 ; i < 10 ; ++i ) {
-		SDL_Rect rect = { .x = 0, .y = i, .w = 5, .h = 5 };
+		SDL_Rect rect = { .x = i*CELL_WIDTH, .y = SCREEN_HEIGHT/CELL_HEIGHT, .w = CELL_WIDTH, .h = CELL_HEIGHT };
 		cvector_emplace_back ( &snake, &rect );
 	}
 
@@ -50,15 +51,28 @@ int main(int argc, char *argv[])
 			case SDL_QUIT:
 				done = true;
 				break;
+			case SDL_KEYDOWN:
+				switch( e.key.keysym.sym ){
+					case SDLK_LEFT:
+						break;
+					case SDLK_RIGHT:
+						break;
+					case SDLK_UP:
+						break;
+					case SDLK_DOWN:
+						break;
+					default:
+						break;
+				}
+				break;
 			default: {}
 			}
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
-		//SDL_RenderDrawRects(SDL_Renderer * renderer, const SDL_Rect * rects, int count);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-		SDL_RenderDrawRects ( renderer, cvector_data ( &snake ), (int)snake.size );
+		SDL_RenderDrawRects ( renderer, cvector_data ( &snake ), (int)cvector_size ( &snake ) );
 		// do render
 		// end render
 		SDL_RenderPresent(renderer);
